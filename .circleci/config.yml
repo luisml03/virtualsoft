@@ -1,0 +1,98 @@
+version: 2.1
+
+orbs:
+  slack: circleci/slack@5.1.1
+
+executors:
+  java-executor:
+    docker:
+      - image: maven:3.9.9-amazoncorretto-21  # Usa una imagen base con Java 21
+    working_directory: ~/repo
+
+jobs:
+  build:
+    executor: java-executor
+    steps:
+      - checkout  # Clona el código del repositorio
+      - run:
+          name: Compilar proyecto
+          command: mvn package  # Genera el archivo .jar
+      - run:
+           name: Ejecutar test
+           command: mvn test  # Ejecuta los tests unitarios
+      - persist_to_workspace:  # Guarda el JAR para los siguientes pasos
+          root: .  # Directorio raíz donde se encuentran los archivos generados
+          paths:
+            - target/  # Carpeta donde Maven guarda el JAR generado
+
+  build-and-push-docker:
+    docker:
+      - image: docker:latest  # Usa una imagen de Docker para construir y empujar imágenes
+    working_directory: ~/repo
+    steps:
+      - checkout  # Clona el código nuevamente
+      - attach_workspace:  # Recupera el workspace que contiene los archivos generados
+          at: /workspace
+      - setup_remote_docker  # Habilita Docker dentro del contenedor
+      - run:
+          name: Iniciar sesión en Docker Hub
+          command: echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
+      - run:
+          name: Ver archivos en target/
+          command: ls -l /workspace/target  # Verifica que los archivos JAR están presentes
+      - run:
+          name: Ver archivos en target/
+          command: pwd
+      - run:
+          name: Ver archivos en target/
+          command: cd /workspace
+      - run:
+          name: Ver archivos en target/
+          command: cp -r /workspace/* /root/repo
+      - run:
+          name: Ver archivos en target/
+          command: pwd
+      - run:
+          name: Construir imagen Docker
+          command: docker build -t $DOCKER_USERNAME/my-java-app:latest .  # Construye la imagen Docker
+      - run:
+          name: Subir imagen a Docker Hub
+          command: docker push $DOCKER_USERNAME/my-java-app:latest
+
+  notify:
+    docker:
+      - image: cimg/base:current  # Imagen base para enviar notificaciones
+    steps:
+      - slack/notify:
+          channel: '#virtuslsoft'
+          custom: |
+            {
+              "blocks": [
+                {
+                  "type": "section",
+                  "fields": [
+                    {
+                      "type": "plain_text",
+                      "text": "*Pipeline finalizado exitosamente*",
+                      "emoji": true
+                    }
+                  ]
+                }
+              ]
+            }
+          event: always
+
+workflows:
+  build-and-push:
+    jobs:
+      - build
+      - build-and-push-docker:
+          requires:
+            - build
+          filters:
+            branches:
+              only: develop  # Solo sube a Docker Hub desde la rama main
+      - notify:
+          requires:
+            - build-and-push-docker
+          context: slack-secrets
