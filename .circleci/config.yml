@@ -64,6 +64,7 @@ jobs:
       - image: cimg/base:current  # Imagen base para enviar notificaciones
     steps:
       - slack/notify:
+          channel: '#virtuslsoft'
           custom: |
             {
               "blocks": [
