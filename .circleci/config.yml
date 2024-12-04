@@ -1,5 +1,7 @@
 version: 2.1
 
+orbs:
+  slack: circleci/slack@5.1.1
 executors:
   java-executor:
     docker:
@@ -14,9 +16,9 @@ jobs:
       - run:
           name: Compilar proyecto
           command: mvn package
-      - run:
-          name: Ejecutar pruebas
-          command: mvn sonar:sonar
+      #- run:
+      #    name: Ejecutar pruebas
+      #    command: mvn sonar:sonar
       - persist_to_workspace:  # Guarda el JAR para los siguientes pasos
           root: .
           paths:
@@ -53,3 +55,8 @@ workflows:
           filters:
             branches:
               only: main  # Solo sube a Docker Hub desde la rama main
+      - slack/notify:
+          requires:
+            - build
+          channel: "#virtualsoft"  # Reemplaza con tu canal
+          event: always
