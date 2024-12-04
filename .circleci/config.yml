@@ -41,6 +41,12 @@ jobs:
           name: Ver archivos en target/
           command: ls -l /workspace/target  # Verifica que los archivos JAR están presentes
       - run:
+          name: Ver archivos en target/
+          command: pwd
+      - run:
+          name: Ver archivos en target/
+          command: cd /workspace
+      - run:
           name: Construir imagen Docker
           command: docker build -t $DOCKER_USERNAME/my-java-app:latest .  # Construye la imagen Docker
       - run:
