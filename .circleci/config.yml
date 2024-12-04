@@ -29,6 +29,9 @@ jobs:
           name: Iniciar sesión en Docker Hub
           command: echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
       - run:
+          name: Crear archivo de versión
+          command: ls -l
+      - run:
           name: Construir imagen Docker
           command: docker build -t $DOCKER_USERNAME/my-java-app:latest .
       - run:
