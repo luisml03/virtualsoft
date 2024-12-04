@@ -11,11 +11,6 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Instalar lint para el markdown
+      - name: Ejecutar markdownlint usando Docker
         run: |
-          sudo apt-get update
-          sudo apt-get install -y markdownlint
-
-      - name: Lint README.md
-        run: markdownlint README.md
-
+          docker run --rm -v ${{ github.workspace }}:/workspace ghcr.io/markdownlint/markdownlint README.md
