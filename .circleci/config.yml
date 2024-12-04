@@ -39,15 +39,6 @@ jobs:
           command: echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
       - run:
           name: Ver archivos en target/
-          command: ls -l /workspace/target  # Verifica que los archivos JAR están presentes
-      - run:
-          name: Ver archivos en target/
-          command: pwd
-      - run:
-          name: Ver archivos en target/
-          command: cd /workspace
-      - run:
-          name: Ver archivos en target/
           command: cp -r /workspace/* /root/repo
       - run:
           name: Ver archivos en target/
@@ -73,7 +64,7 @@ jobs:
                   "fields": [
                     {
                       "type": "plain_text",
-                      "text": "*Este es un mensaje de notificación*",
+                      "text": "*Pipeline finalizado exitosamente*",
                       "emoji": true
                     }
                   ]
@@ -83,7 +74,6 @@ jobs:
           event: always
 
 workflows:
-  version: 2
   build-and-push:
     jobs:
       - build
@@ -92,7 +82,7 @@ workflows:
             - build
           filters:
             branches:
-              only: main  # Solo sube a Docker Hub desde la rama main
+              only: develop  # Solo sube a Docker Hub desde la rama main
       - notify:
           requires:
             - build-and-push-docker
