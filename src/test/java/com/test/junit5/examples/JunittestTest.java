@@ -17,7 +17,7 @@ public class JunittestTest {
     @Test
     void testNombreCuenta() {
         Junittest junittest = new Junittest();
-        //junittest.setPersona("luis");
+        junittest.setPersona("luis");
         String esperad = "luis";
         String real = junittest.getPersona();
 
