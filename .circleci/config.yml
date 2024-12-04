@@ -13,10 +13,14 @@ jobs:
       - checkout  # Clona el código del repositorio
       - run:
           name: Compilar proyecto
-          command: mvn compile
+          command: mvn package
       - run:
           name: Ejecutar pruebas
           command: mvn sonar:sonar
+      - persist_to_workspace:  # Guarda el JAR para los siguientes pasos
+          root: .
+          paths:
+            - target/  # Carpeta donde Maven guarda el JAR generado
 
   build-and-push-docker:
     docker:
@@ -28,6 +32,9 @@ jobs:
       - run:
           name: Iniciar sesión en Docker Hub
           command: echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
+      - run:
+          name: Crear archivo de versión
+          command: ls -l
       - run:
           name: Construir imagen Docker
           command: docker build -t $DOCKER_USERNAME/my-java-app:latest .
