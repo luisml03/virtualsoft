@@ -39,15 +39,6 @@ jobs:
           command: echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
       - run:
           name: Ver archivos en target/
-          command: ls -l /workspace/target  # Verifica que los archivos JAR están presentes
-      - run:
-          name: Ver archivos en target/
-          command: pwd
-      - run:
-          name: Ver archivos en target/
-          command: cd /workspace
-      - run:
-          name: Ver archivos en target/
           command: cp -r /workspace/* /root/repo
       - run:
           name: Ver archivos en target/
