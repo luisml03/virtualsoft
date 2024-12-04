@@ -10,3 +10,5 @@ COPY target/*.jar /app.jar
 
 # Ejecutar la aplicación con el perfil especificado
 ENTRYPOINT ["java", "-jar", "-Dspring.profiles.active=default", "/app.jar"]
+
+

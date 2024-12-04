@@ -73,7 +73,7 @@ jobs:
                   "fields": [
                     {
                       "type": "plain_text",
-                      "text": "*Este es un mensaje de notificación*",
+                      "text": "*Pipeline finalizado exitosamente*",
                       "emoji": true
                     }
                   ]
@@ -92,7 +92,7 @@ workflows:
             - build
           filters:
             branches:
-              only: main  # Solo sube a Docker Hub desde la rama main
+              only: develop  # Solo sube a Docker Hub desde la rama main
       - notify:
           requires:
             - build-and-push-docker
