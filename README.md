@@ -1,2 +1,3 @@
 # Getting Started
-### Reference Documentation
+
+## Reference Documentation
