@@ -3,7 +3,7 @@ version: 2.1
 executors:
   java-executor:
     docker:
-      - image: amazoncorretto:21  # Usa una imagen base con Java 21
+      - image: 3.9.9-amazoncorretto-21  # Usa una imagen base con Java 21
     working_directory: ~/repo
 
 jobs:
@@ -11,10 +11,6 @@ jobs:
     executor: java-executor
     steps:
       - checkout  # Clona el código del repositorio
-      - run:
-          name: Configurar dependencias
-          command: |
-            sudo apt-get update && sudo apt-get install -y maven
       - run:
           name: Compilar proyecto
           command: mvn compile
