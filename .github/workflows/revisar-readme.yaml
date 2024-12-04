@@ -1,0 +1,23 @@
+name: Check README Syntax
+on:
+  pull_request:
+    branches: [ develop ]
+    types: [ opened, reopened ]
+jobs:
+  check-syntax:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Instalar Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'  # O la versión que prefieras
+
+      - name: Instalar markdownlint-cli
+        run: npm install -g markdownlint-cli
+
+      - name: Lint README.md
+        run: markdownlint README.md

@@ -28,7 +28,7 @@
 	</scm>
 	<properties>
 		<java.version>21</java.version>
-		<sonar.host.url>http://10.1.40.171:9000</sonar.host.url>
+		<sonar.host.url>https://2030-201-184-246-67.ngrok-free.app</sonar.host.url>
 		<sonar.login>squ_169e247a0359315246bb47a0a25181f93df931c9</sonar.login>
 		<sonar.junit.reportPaths>target/test-classes</sonar.junit.reportPaths>
     <sonar.jacoco.reportPaths>target/jacoco.exec</sonar.jacoco.reportPaths>
