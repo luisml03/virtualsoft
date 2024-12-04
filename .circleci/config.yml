@@ -43,6 +43,27 @@ jobs:
       - run:
           name: Subir imagen a Docker Hub
           command: docker push $DOCKER_USERNAME/my-java-app:latest
+  notify:
+    docker:
+      - image: cimg/base:current  # Imagen base para enviar notificaciones
+    steps:
+      - slack/notify:
+          custom: |
+            {
+              "blocks": [
+                {
+                  "type": "section",
+                  "fields": [
+                    {
+                      "type": "plain_text",
+                      "text": "*Este es un mensaje de notificación*",
+                      "emoji": true
+                    }
+                  ]
+                }
+              ]
+            }
+          event: always
 
 workflows:
   version: 2
@@ -55,8 +76,7 @@ workflows:
           filters:
             branches:
               only: main  # Solo sube a Docker Hub desde la rama main
-      - slack/notify:
+      - notify:
           requires:
-            - build
-          channel: "#virtualsoft"  # Reemplaza con tu canal
-          event: always
+            - build-and-push-docker
+          context: slack-secrets
